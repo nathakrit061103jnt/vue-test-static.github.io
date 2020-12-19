@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="Description" content="Enter your description here" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
+
+    <title>Title</title>
+  </head>
+  <body>
+    <div class="container" id="app">
+      
+
+       <div class="form-group">
+         <label for=""></label>
+         <input type="text"  class="form-control" v-model="search" @change="searchUsers" name="" id="" aria-describedby="helpId" placeholder=""> 
+       </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in users" :key="item.id">
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.name}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.phone}}</td>
+          </tr> 
+        </tbody>
+      </table>
+ 
+
+    </div>
+
+    <script> 
+
+      const app = new Vue({
+        el: "#app",
+        data: {
+          users:null,
+          error:false,
+          search:null,
+        },
+        mounted() {
+          this.getUsers()
+        },
+        methods: { 
+          getUsers(){
+            axios.get('https://jsonplaceholder.typicode.com/users').then((Response)=>{
+              this.users = Response.data;
+              //console.log('this.users',this.users)
+            }).catch(error=>{
+              this.error = true
+              console.error(error)
+            })
+          },
+          searchUsers(){
+            console.log('search',this.search.toLowerCase())
+             console.log('users',this.users)
+            let searchData = this.users.filter((user)=>{
+               return user.id == this.search
+            })
+            console.log('searchData',searchData)
+            if(searchData != null){
+              this.users = searchData
+            }else{
+              this.getUsers()
+            }
+          },
+
+      
+  
+
+        },
+      });
+
+
+  
+
+
+    </script>
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
